@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+    id="cordova-plugin-audio-controls"
+    version="1.0.0">
+    <name>Audio Controls Cordova Plugin</name>
+    <description></description>
+    <license>MIT</license>
+    <keywords></keywords>
+    <repo>https://github.com/driftyco/cordova-plugin-template.git</repo>
+    <issue>https://github.com/driftyco/cordova-plugin-template/issues</issue>
+
+    <!-- android TODO -->
+    <platform name="android">
+      <js-module src="www/AudioControls.js" name="plugin">
+        <runs/>
+        <clobbers target="window.AudioControls" />
+      </js-module>
+      <config-file target="res/xml/config.xml" parent="/*">
+        <feature name="AudioControls">
+          <param name="android-package" value="com.oncell.AudioControls" />
+          <param name="onload" value="true" />
+        </feature>
+      </config-file>
+
+      <source-file src="src/android/com/oncell/AudioControls.java" target-dir="src/com/oncell/" />
+    </platform>
+
+    <!-- ios -->
+    <platform name="ios">
+        <js-module src="www/AudioControls.js" name="plugin">
+            <runs/>
+            <clobbers target="window.AudioControls" />
+        </js-module>
+        <config-file target="config.xml" parent="/*">
+            <feature name="AudioControls">
+                <param name="ios-package" value="AudioControls" onload="true" />
+            </feature>
+        </config-file>
+        <header-file src="src/ios/AudioControls.h" />
+        <source-file src="src/ios/AudioControls.m" />
+        <framework src="MediaPlayer.framework" weak="true" />
+    </platform>
+</plugin>

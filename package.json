@@ -1,0 +1,12 @@
+{
+  "name": "cordova-plugin-audio-controls",
+  "version": "1.0.0",
+  "cordova": {
+    "id": "cordova-plugin-audio-controls",
+    "platforms": [
+      "android",
+      "ios",
+    ]
+  },
+  "description": "A plugin to handle audio controls when playing in the background"
+}
