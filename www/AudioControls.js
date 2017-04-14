@@ -29,6 +29,7 @@ var AudioControls = {
     
     /**
      * Set display of track info:
+     * isPlaying
      * albumTitle
      * trackCount
      * trackNumber
