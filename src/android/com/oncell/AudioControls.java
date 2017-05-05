@@ -58,6 +58,11 @@ public class AudioControls extends CordovaPlugin {
           result.setKeepCallback(true);
           this.cb.sendPluginResult(result);
 					break;
+        case "destroy":
+          result = new PluginResult(PluginResult.Status.OK, "destroy");
+          result.setKeepCallback(true);
+          this.cb.sendPluginResult(result);
+					break;
         default:
           result = new PluginResult(PluginResult.Status.OK, action);
           result.setKeepCallback(true);
@@ -105,13 +110,23 @@ public class AudioControls extends CordovaPlugin {
     public Notification buildNotification() throws JSONException {
       Context context = activity;
       Notification.Builder builder = new Notification.Builder(context);
+      
+      // Set notification details
       builder.setContentTitle(this.nowPlaying.getString("title"));
       builder.setContentText(this.nowPlaying.getString("artist"));
       builder.setSmallIcon(R.drawable.ic_media_play);
       Bitmap largeIcon = BitmapFactory.decodeResource(context.getResources(), context.getResources().getIdentifier("icon", "drawable", context.getPackageName()));
       builder.setLargeIcon(largeIcon);
       builder.setWhen(0);
-      builder.setOngoing(true);
+      
+      // Set whether the notification is dismissable
+      // builder.setOngoing(true); // If the notification should NOT be dismissable
+      builder.setOngoing(false);
+			Intent dismissIntent = new Intent("destroy");
+			PendingIntent dismissPendingIntent = PendingIntent.getBroadcast(context, 1, dismissIntent, 0);
+			builder.setDeleteIntent(dismissPendingIntent);
+      
+      // Set notification priority
       builder.setPriority(Notification.PRIORITY_MAX);
       if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
 			     builder.setVisibility(Notification.VISIBILITY_PUBLIC);
@@ -157,10 +172,12 @@ public class AudioControls extends CordovaPlugin {
 		final Context context = activity.getApplicationContext();
     
     this.audioControlsNotification = new AudioControlsNotification(activity);
+    this.audioControlsNotification.clearNowPlaying();
     this.audioControlsBroadcastReceiver = new AudioControlsBroadcastReceiver(this);
     
 		context.registerReceiver((BroadcastReceiver)audioControlsBroadcastReceiver, new IntentFilter("pause"));
 		context.registerReceiver((BroadcastReceiver)audioControlsBroadcastReceiver, new IntentFilter("play"));
+    context.registerReceiver((BroadcastReceiver)audioControlsBroadcastReceiver, new IntentFilter("destroy"));
 		context.registerReceiver((BroadcastReceiver)audioControlsBroadcastReceiver, new IntentFilter("audio-controls-media-button"));
     
     this.audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
